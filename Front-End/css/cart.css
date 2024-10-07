@@ -1,0 +1,139 @@
+/* Reset de estilos */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+/* Estilos do cabeçalho */
+.header {
+    width: 100vw;
+    height: 16.67vh;
+    background-color: #121212;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+/* Título do cabeçalho */
+#header-tittle {
+    color: #7723FF;
+    font-size: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+/* Estilo da grade do carrinho */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adapta-se ao tamanho da tela */
+    gap: 2vw; /* Espaçamento entre os itens */
+    padding: 2vw;
+}
+
+/* Estilos gerais dos produtos no carrinho */
+.productCart {
+    background-color: white;
+    border: 0.1vw solid #ddd;
+    border-radius: 1vh;
+    overflow: hidden;
+    text-align: center;
+    padding: 1vh;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Efeito de hover para produtos */
+.productCart:hover {
+    transform: translateY(-5px);
+}
+
+/* Imagens dos produtos */
+.productCart img {
+    max-width: 100%;
+    border-bottom: 0.1vw solid #ddd;
+    margin-bottom: 1vh;
+}
+
+/* Nome do produto */
+.productName {
+    font-size: 2vh;
+    font-weight: bold;
+}
+
+/* Preço do produto */
+.productPrice {
+    font-size: 1.8vh;
+    color: #007BFF;
+}
+
+/* Input de quantidade */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Botões do carrinho */
+.clear-cart-button,
+.checkout-button {
+    background-color: #4caf50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-top: 1vh;
+    padding: 1vh 2vh;
+    border-radius: 5px;
+    font-size: 1.2em;
+}
+
+.clear-cart-button:hover,
+.checkout-button:hover {
+    background-color: #45a049;
+}
+
+/* Ícones */
+.fa-trash-alt,
+.fa-shopping-cart {
+    margin-right: 0.5vh;
+}
+
+/* Título do carrinho */
+#tittle-cart {
+    margin-top: 3vh;
+    margin-left: 3vw;
+    font-size: 5vh;
+    color: #7723FF;
+}
+
+/* Total do carrinho */
+.cart-total {
+    margin-top: 2vh;
+    text-align: right;
+    font-weight: bold;
+    font-size: 1.5em;
+    color: #333;
+}
+
+/* Alinhamento e estilo do carrinho */
+.cart-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Para garantir que o layout não quebre em telas pequenas */
+@media (max-width: 600px) {
+    .grid-container {
+        grid-template-columns: 1fr; /* Uma coluna em telas pequenas */
+    }
+
+    #header-tittle {
+        font-size: 5vh; /* Tamanho menor para o título */
+    }
+}

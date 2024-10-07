@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="product-name product${product.id_products}">${product.product_name}</div>
                     <p>${product.id_products}</p>
                     <div class="product-price product${product.id_products}">R$ ${product.price}</div>
-                    <button class="edit-btn" data-product-id="${product.id_products}" style="margin-top:10px;">Editar</button>
+                    <button class="edit-btn" data-product-id="${product.id_products}" onclick="openEditProductModal(${product.id_products})" style="margin-top:10px;">Editar</button>
+
                     <button class="add-to-cart-button" onclick="addToCart(${product.id_products}, ${userId})">Adicionar ao Carrinho</button>
                 `;
 
@@ -45,6 +46,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         productList.innerHTML = '<p>Erro ao carregar produtos.</p>';
     }
 });
+function openEditProductModal(productId) {
+    // Obtenha o modal de edição de produto
+    const modal = document.getElementById('editProductModal');
+
+    // Mostre o modal
+    modal.style.display = 'block';
+
+    // Faça uma requisição para obter os detalhes do produto com base no ID
+    fetch(`http://localhost:3333/produtos/${productId}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // Preencha os campos do modal com as informações do produto
+            document.getElementById('editProductName').value = data.product_name;
+            document.getElementById('editProductPrice').value = data.price;
+            document.getElementById('editProductAmount').value = data.amount;
+            document.getElementById('editProductImageLink').value = data.image_link;
+
+            // Guarde o ID do produto para atualização posterior
+            document.getElementById('editProductId').value = productId;
+        })
+        .catch(error => {
+            console.error('Erro ao carregar os dados do produto:', error);
+        });
+}
+
+// Fechar o modal
+function closeEditProductModal() {
+    const modal = document.getElementById('editProductModal');
+    modal.style.display = 'none';
+}
+
 
 // Função para adicionar produtos ao carrinho
 function addToCart(productId, userId, quantity = 1) {
@@ -70,6 +103,72 @@ function addToCart(productId, userId, quantity = 1) {
         }
     })
     .catch(error => console.error('Erro ao fazer a requisição:', error));
+}
+function submitEditForm(productId) {
+    const productName = document.getElementById('editProductName').value;
+    const productPrice = document.getElementById('editProductPrice').value;
+    const productAmount = document.getElementById('editProductAmount').value;
+    const productImageLink = document.getElementById('editProductImageLink').value;
+    const productDescription = document.getElementById('editProductDescription').value;
+
+    const productData = {
+        product_name: productName,
+        price: productPrice,
+        amount: productAmount,
+        image_link: productImageLink,
+        description: productDescription
+    };
+
+    fetch(`http://localhost:3333/product/update/${productId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(productData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Produto atualizado com sucesso!');
+            closeEditProductModal(); // Fecha o modal após a edição
+            window.location.reload(); // Atualiza a página para refletir as mudanças
+        } else {
+            alert('Erro ao atualizar produto: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao atualizar o produto:', error);
+    });
+}
+function deletarProduto(event, productId) {
+    event.preventDefault(); // Previne o comportamento padrão do botão
+
+    if (confirm('Tem certeza de que deseja deletar este produto?')) {
+        fetch(`http://localhost:3333/product/delete/${productId}`, {
+            method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Produto deletado com sucesso!');
+                closeEditProductModal(); // Fecha o modal após a exclusão
+                window.location.reload(); // Atualiza a página para refletir as mudanças
+            } else {
+                alert('Erro ao deletar produto: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao deletar o produto:', error);
+        });
+    }
+}
+document.getElementById('closeEditModal').addEventListener('click', () => {
+    closeEditProductModal();
+});
+
+function closeEditProductModal() {
+    const modal = document.getElementById('editProductModal');
+    modal.style.display = 'none';
 }
 
 // // Função para verificar se o usuário é admin
